@@ -1,0 +1,22 @@
+# Secrets
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/venv/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+*.log

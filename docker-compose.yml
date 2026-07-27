@@ -1,0 +1,46 @@
+version: "3.9"
+
+# ============================================================
+# Aether — AI Career Coach & Startup Venture Advisor
+# Run: docker compose up --build
+# Setup: cp backend/.env.example backend/.env → add ANTHROPIC_API_KEY
+# ============================================================
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: Aether_backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
+    networks:
+      - Aether_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: Aether_frontend
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - Aether_net
+    restart: unless-stopped
+
+networks:
+  Aether_net:
+    driver: bridge
